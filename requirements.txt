@@ -1,0 +1,4 @@
+flask
+google-genai
+pyyaml
+python-dotenv

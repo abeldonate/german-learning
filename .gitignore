@@ -1,0 +1,8 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+diary.db
+diary.db-journal
+diary.db-wal
+diary.db-shm

@@ -1,0 +1,134 @@
+# Gemini model used for both sentence generation and translation.
+# Override at runtime with the GEMINI_MODEL environment variable.
+# Note: gemini-flash-lite-latest (-> gemini-3.5-flash-lite) hit its free-tier
+# daily cap (500 req/day) from heavy testing, and gemini-flash-latest
+# (-> gemini-3.8-flash) only gets 5 requests/minute free - too tight for the
+# background prefetch queues. gemini-3.1-flash-lite is a separate quota
+# bucket from both and has a much more generous free-tier rate.
+model: gemini-3.1-flash-lite
+
+# Filesystem paths, relative to the project root.
+paths:
+  wordlist: german_lemmas_top5000.json
+  diary_db: diary.db
+
+# Number of items kept pre-generated in the background queue, per exercise
+# (sentences, cloze, odd-one-out each keep their own queue at this size). Each
+# item costs 1-2 Gemini calls, so keep this modest on the free tier (15
+# requests/minute, shared across all three queues).
+queue_size: 3
+
+# Pause between successful background fills, so a queue never bursts through
+# the whole per-minute quota in one go.
+queue_fill_pacing_seconds: 1.5
+
+# Keyboard shortcuts. "code" must be a KeyboardEvent.code value (layout-independent);
+# "label" is what's shown to the user in the on-page shortcut hint.
+keys:
+  generate:
+    code: Space
+    label: Space
+  translate:
+    code: AltRight
+    label: Alt Gr
+
+# Vocabulary-size slider.
+slider:
+  min: 1000
+  max: 5000
+  step: 250
+
+# Tone picker: a grid of style_axis (columns) x seriousness_axis (rows).
+# "label" is the short text shown in the UI; "prompt" is the phrase spliced
+# into the generation system prompt for that axis position. Both axes must
+# have the same length (the grid is square).
+tone:
+  default: { x: 0, y: 2 }
+  style_axis: # x: 0 = story ... last = essay/informational
+    - label: Story
+      prompt: a short narrative story with characters and events
+    - label: Mostly story
+      prompt: a narrative story that leans slightly informational
+    - label: Mixed
+      prompt: a balanced mix of narrative storytelling and informational writing
+    - label: Mostly essay
+      prompt: informational writing with a light narrative framing
+    - label: Essay
+      prompt: a short informational essay or explanation, with no story and no characters
+  seriousness_axis: # y: 0 = funny ... last = serious
+    - label: Funny
+      prompt: very funny, silly, and playful
+    - label: Light
+      prompt: lighthearted and casual
+    - label: Neutral
+      prompt: neutral, neither funny nor serious
+    - label: Formal
+      prompt: formal and measured
+    - label: Serious
+      prompt: very serious and solemn
+
+# Cloze (fill-in-the-blank) exercise: which word in the generated sentence is
+# eligible to be blanked out. Words shorter than min_word_length, or matching
+# one of these common function words, are skipped so the blank lands on a
+# meaningful content word with one clear correct answer.
+cloze:
+  min_word_length: 4
+  stopwords:
+    - der
+    - die
+    - das
+    - den
+    - dem
+    - des
+    - ein
+    - eine
+    - einen
+    - einem
+    - einer
+    - eines
+    - ich
+    - du
+    - er
+    - sie
+    - es
+    - wir
+    - ihr
+    - und
+    - ist
+    - sind
+    - war
+    - waren
+    - hat
+    - habe
+    - haben
+    - wird
+    - werden
+    - nicht
+    - auch
+    - noch
+    - nur
+    - sehr
+    - so
+    - wie
+    - dass
+    - aber
+    - oder
+    - zu
+    - in
+    - an
+    - im
+    - am
+    - mit
+    - auf
+    - für
+    - von
+    - bei
+    - nach
+    - über
+    - unter
+    - vor
+    - durch
+    - kann
+    - muss
+    - soll
+    - will

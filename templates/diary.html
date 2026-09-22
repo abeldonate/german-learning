@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German Diary</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <a class="back-link" href="/">← All exercises</a>
+
+    <div class="topbar">
+      <div>
+        <h1>Diary</h1>
+        <p class="subtitle">Write about your day in German. We'll correct it and explain the biggest mistakes.</p>
+      </div>
+
+      <div class="calendar-picker">
+        <button id="calendarBtn" type="button" aria-haspopup="true" aria-expanded="false">
+          📅 Calendar
+        </button>
+        <div class="calendar-popover" id="calendarPopover" hidden>
+          <div class="calendar-header">
+            <button type="button" id="calPrevBtn" aria-label="Previous month">‹</button>
+            <span id="calMonthLabel"></span>
+            <button type="button" id="calNextBtn" aria-label="Next month">›</button>
+          </div>
+          <div class="calendar-weekdays" id="calWeekdays"></div>
+          <div class="calendar-grid" id="calGrid" role="grid" aria-label="Diary calendar"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="diary-date-label" id="dateLabel"></p>
+
+    <section class="diary-input">
+      <label for="draftInput">Your entry</label>
+      <textarea id="draftInput" rows="8" placeholder="Heute bin ich..."></textarea>
+    </section>
+
+    <section class="actions">
+      <button id="correctBtn" disabled>Correct</button>
+      <button id="clearBtn" disabled>Clear</button>
+    </section>
+
+    <p class="status" id="status"></p>
+
+    <section class="story" id="resultSection" hidden>
+      <h2>Corrected version</h2>
+      <p id="correctedText"></p>
+    </section>
+
+    <section class="translation" id="explanationSection" hidden>
+      <h2>What to watch for</h2>
+      <p id="explanationText"></p>
+    </section>
+  </main>
+
+  <script>
+    window.APP_CONFIG = {
+      today: {{ today | tojson }},
+    };
+  </script>
+  <script src="{{ url_for('static', filename='diary.js') }}"></script>
+</body>
+</html>

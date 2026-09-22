@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odd One Out</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <a class="back-link" href="/">← All exercises</a>
+
+    <h1>Odd One Out</h1>
+    <p class="subtitle">Click the word that doesn't belong with the other three.</p>
+
+    <section class="controls">
+      <label for="wordLimit">
+        Vocabulary size: <span id="wordLimitValue">{{ min_words }}</span> words
+        (~<span id="coveragePercent">{{ initial_coverage }}</span>% of daily conversation)
+      </label>
+      <input
+        type="range"
+        id="wordLimit"
+        min="{{ min_words }}"
+        max="{{ max_words }}"
+        step="{{ step }}"
+        value="{{ min_words }}"
+      >
+      <div class="range-labels">
+        <span>{{ min_words }}</span>
+        <span>{{ max_words }}</span>
+      </div>
+    </section>
+
+    <section class="oddoneout-board" id="board" aria-live="polite">
+      <p class="placeholder">Click "Generate" to get 4 words.</p>
+    </section>
+
+    <p class="feedback" id="feedback"></p>
+
+    <section class="actions">
+      <button id="generateBtn">Generate</button>
+      <button id="translateBtn" disabled>Translate</button>
+      <button id="resetBtn" disabled>Restart</button>
+    </section>
+
+    <p class="shortcuts">
+      Shortcuts: <kbd>{{ generate_key.label }}</kbd> Generate
+      &nbsp;·&nbsp;
+      <kbd>{{ translate_key.label }}</kbd> Translate
+    </p>
+
+    <p class="status" id="status"></p>
+  </main>
+
+  <script>
+    window.APP_CONFIG = {
+      generateKeyCode: {{ generate_key.code | tojson }},
+      translateKeyCode: {{ translate_key.code | tojson }},
+      coverageByWordLimit: {{ coverage_by_word_limit | tojson }},
+    };
+  </script>
+  <script src="{{ url_for('static', filename='odd-one-out.js') }}"></script>
+</body>
+</html>

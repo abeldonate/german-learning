@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German Practice</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <h1>German Practice</h1>
+    <p class="subtitle">Pick a mini-exercise.</p>
+
+    <div class="exercise-grid">
+      <a class="exercise-card" href="/sentences">
+        <h2>Reading</h2>
+        <p>Generate short German text one sentence at a time, with instant translation.</p>
+      </a>
+      <a class="exercise-card" href="/cloze">
+        <h2>Fill in the Blank</h2>
+        <p>Read a sentence with a missing word and type in the answer.</p>
+      </a>
+      <a class="exercise-card" href="/odd-one-out">
+        <h2>Odd One Out</h2>
+        <p>Spot which of 4 words doesn't belong with the others.</p>
+      </a>
+      <a class="exercise-card" href="/diary">
+        <h2>Diary</h2>
+        <p>Write about your day in German and get it corrected, with an explanation of the biggest mistakes.</p>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German Reading Practice</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <a class="back-link" href="/">← All exercises</a>
+
+    <div class="topbar">
+      <div>
+        <h1>German Reading Practice</h1>
+        <p class="subtitle">Generate simple German text limited to your vocabulary level.</p>
+      </div>
+
+      <div class="tone-picker">
+        <button id="toneBtn" type="button" aria-haspopup="true" aria-expanded="false">
+          Tone: <span id="toneLabel"></span>
+        </button>
+        <div class="tone-popover" id="tonePopover" hidden>
+          <div class="tone-axis-top">{{ tone_seriousness_axis[0].label }}</div>
+          <div class="tone-grid-row">
+            <div class="tone-axis-left">{{ tone_style_axis[0].label }}</div>
+            <div class="tone-grid" id="toneGrid" role="grid" aria-label="Tone picker"></div>
+            <div class="tone-axis-right">{{ tone_style_axis[-1].label }}</div>
+          </div>
+          <div class="tone-axis-bottom">{{ tone_seriousness_axis[-1].label }}</div>
+          <div class="tone-desc" id="toneDesc"></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="controls">
+      <label for="wordLimit">
+        Vocabulary size: <span id="wordLimitValue">{{ min_words }}</span> words
+        (~<span id="coveragePercent">{{ initial_coverage }}</span>% of daily conversation)
+      </label>
+      <input
+        type="range"
+        id="wordLimit"
+        min="{{ min_words }}"
+        max="{{ max_words }}"
+        step="{{ step }}"
+        value="{{ min_words }}"
+      >
+      <div class="range-labels">
+        <span>{{ min_words }}</span>
+        <span>{{ max_words }}</span>
+      </div>
+    </section>
+
+    <section class="story" id="story" aria-live="polite">
+      <p class="placeholder">Click "Generate" to start using only your selected vocabulary.</p>
+    </section>
+
+    <section class="translation" id="translation" hidden>
+      <h2>Translation</h2>
+      <p id="translationText"></p>
+    </section>
+
+    <section class="actions">
+      <button id="generateBtn">Generate</button>
+      <button id="translateBtn" disabled>Translate</button>
+      <button id="resetBtn" disabled>Restart</button>
+    </section>
+
+    <p class="shortcuts">
+      Shortcuts: <kbd>{{ generate_key.label }}</kbd> Generate
+      &nbsp;·&nbsp;
+      <kbd>{{ translate_key.label }}</kbd> Translate
+    </p>
+
+    <p class="status" id="status"></p>
+  </main>
+
+  <script>
+    window.APP_CONFIG = {
+      generateKeyCode: {{ generate_key.code | tojson }},
+      translateKeyCode: {{ translate_key.code | tojson }},
+      coverageByWordLimit: {{ coverage_by_word_limit | tojson }},
+      toneStyleLabels: {{ tone_style_axis | map(attribute="label") | list | tojson }},
+      toneSeriousnessLabels: {{ tone_seriousness_axis | map(attribute="label") | list | tojson }},
+      toneDefault: { x: {{ tone_default_x }}, y: {{ tone_default_y }} },
+    };
+  </script>
+  <script src="{{ url_for('static', filename='sentences.js') }}"></script>
+</body>
+</html>
